@@ -10,7 +10,7 @@ public class Validator {
         if (StringUtils.isBlank(items.getName())) {
             throw new ValidationException(HttpStatus.BAD_REQUEST, "Item has no name");
         }
-        if (StringUtils.isBlank(items.getDescription()) || items.getDescription().equals("")) {
+        if (StringUtils.isBlank(items.getDescription())) {
             throw new ValidationException(HttpStatus.BAD_REQUEST, "Item has no description");
         }
         if (items.getAvailable() == null) {

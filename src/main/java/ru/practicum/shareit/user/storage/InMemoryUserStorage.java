@@ -54,7 +54,7 @@ public class InMemoryUserStorage {
         if (StringUtils.isBlank(user.getEmail()) || !(user.getEmail().contains("@"))) {
             throw new ValidationException(HttpStatus.BAD_REQUEST, "Email must not be blank and should include @");
         }
-        if (StringUtils.isBlank(user.getName()) || user.getName().contains(" ") || user.getName().equals("")) {
+        if (StringUtils.isBlank(user.getName()) || StringUtils.containsWhitespace(user.getName())) {
             throw new ValidationException(HttpStatus.BAD_REQUEST, "Username must not be blank or contain spaces");
         }
         for (User u : users.values()) {
