@@ -34,6 +34,7 @@ public class ItemServiceImpl implements ItemService {
         try {
             Item oldItem = inMemoryItemStorage.getItemById(itemId);
             if (oldItem == null) {
+                log.error("Item with ID {} not found", itemId);
                 throw new ValidationException(HttpStatus.NOT_FOUND, "Item not found");
             }
             if (oldItem.getOwner() != null && !oldItem.getOwner().equals(owner)) {
