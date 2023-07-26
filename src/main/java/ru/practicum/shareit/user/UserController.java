@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.storage.InMemoryUserStorage;
+import ru.practicum.shareit.user.service.UserService;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -17,11 +17,11 @@ import java.util.stream.Collectors;
 @Slf4j
 @AllArgsConstructor
 public class UserController {
-    private InMemoryUserStorage inMemoryUserStorage;
+    private final UserService userService;
 
     @GetMapping
     private List<UserDto> getAllUsers() {
-        return inMemoryUserStorage
+        return userService
                 .getAllUsers()
                 .stream()
                 .map(UserMapper::toUserDto).collect(Collectors.toList());
@@ -32,7 +32,7 @@ public class UserController {
             @PathVariable("id") int id) {
         try {
             return UserMapper
-                    .toUserDto(inMemoryUserStorage.getById(id));
+                    .toUserDto(userService.getById(id));
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
@@ -42,7 +42,7 @@ public class UserController {
     private UserDto addUser(
             @RequestBody UserDto user) {
         return UserMapper
-                .toUserDto(inMemoryUserStorage.addUser(UserMapper.toUser(user)));
+                .toUserDto(userService.addUser(UserMapper.toUser(user)));
     }
 
     @PatchMapping("/{id}")
@@ -50,9 +50,9 @@ public class UserController {
             @RequestBody UserDto user,
             @PathVariable int id) {
         try {
-            inMemoryUserStorage.updateUser(UserMapper.toUser(user), id);
+            userService.updateUser(UserMapper.toUser(user), id);
             return UserMapper
-                    .toUserDto(inMemoryUserStorage.getById(id));
+                    .toUserDto(userService.getById(id));
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
@@ -62,7 +62,7 @@ public class UserController {
     private void deleteUser(
             @PathVariable int id) {
         try {
-            inMemoryUserStorage.deleteUser(id);
+            userService.deleteUser(id);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }

@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.service.ItemService;
-import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.storage.InMemoryUserStorage;
+import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.service.UserService;
+import ru.practicum.shareit.util.Constant;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -19,12 +19,12 @@ import java.util.NoSuchElementException;
 @AllArgsConstructor
 @Slf4j
 public class ItemController {
-    private InMemoryUserStorage inMemoryUserStorage;
+    private final UserService userService;
     private final ItemService itemService;
 
     @GetMapping
-    private Collection<ItemDto> getAllUserItems(
-            @RequestHeader("X-Sharer-User-Id") int userId) {
+    private List<ItemDto> getAllUserItems(
+            @RequestHeader((Constant.REQUEST_HEADER_USER_ID)) int userId) {
         return itemService.getAllUserItems(userId);
     }
 
@@ -47,9 +47,9 @@ public class ItemController {
     @PostMapping
     public ItemDto addItem(
             @RequestBody ItemDto itemDto,
-            @RequestHeader(name = "X-Sharer-User-Id") int userId) {
+            @RequestHeader((Constant.REQUEST_HEADER_USER_ID)) int userId) {
         try {
-            User user = inMemoryUserStorage.getById(userId);
+            User user = userService.getById(userId);
             return itemService.addItem(itemDto, user);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
@@ -60,9 +60,9 @@ public class ItemController {
     public ItemDto updateItem(
             @PathVariable Long itemId,
             @RequestBody ItemDto itemDto,
-            @RequestHeader(name = "X-Sharer-User-Id") int userId) {
+            @RequestHeader((Constant.REQUEST_HEADER_USER_ID)) int userId) {
         try {
-            User user = inMemoryUserStorage.getById(userId);
+            User user = userService.getById(userId);
             return itemService.updateItem(itemId, itemDto, user);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");

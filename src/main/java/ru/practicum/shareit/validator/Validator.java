@@ -7,7 +7,7 @@ import ru.practicum.shareit.item.model.Item;
 
 public class Validator {
     public static void validate(Item items) throws ValidationException {
-        if (StringUtils.isBlank(items.getName()) || items.getName().equals("")) {
+        if (StringUtils.isBlank(items.getName())) {
             throw new ValidationException(HttpStatus.BAD_REQUEST, "Item has no name");
         }
         if (StringUtils.isBlank(items.getDescription()) || items.getDescription().equals("")) {

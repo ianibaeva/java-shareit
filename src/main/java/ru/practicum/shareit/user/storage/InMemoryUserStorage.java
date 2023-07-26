@@ -7,12 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.shareit.exception.ValidationException;
-import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.user.model.User;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 @Data
 @Slf4j
@@ -29,9 +28,6 @@ public class InMemoryUserStorage {
     }
 
     public User getById(int id) {
-        if (!users.containsKey(id)) {
-            throw new NoSuchElementException();
-        }
         return users.get(id);
     }
 
@@ -44,8 +40,6 @@ public class InMemoryUserStorage {
     }
 
     public void updateUser(User user, int id) {
-        var newUser = users.get(id);
-        user = user.updateFrom(newUser);
         validate(user);
         users.put(id, user);
         log.info("User {} has been updated", users.toString().toUpperCase());
