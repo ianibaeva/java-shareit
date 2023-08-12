@@ -20,7 +20,7 @@ public class InMemoryUserStorage {
 
     private Map<Integer, User> users = new HashMap<>();
 
-    private int id = 1;
+    private Long id = 1L;
 
     public Collection<User> getAllUsers() {
         log.info("Users {}", users.toString().toUpperCase());
@@ -34,7 +34,7 @@ public class InMemoryUserStorage {
     public User addUser(User user) {
         validate(user);
         user.setId(id++);
-        users.put(user.getId(), user);
+        users.put(user.getId().intValue(), user);
         log.info("User {} has been added", users.toString().toUpperCase());
         return user;
     }
