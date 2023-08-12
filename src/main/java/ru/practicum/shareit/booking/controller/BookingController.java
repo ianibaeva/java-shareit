@@ -11,7 +11,6 @@ import ru.practicum.shareit.util.Constant;
 import ru.practicum.shareit.util.Create;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping(path = "/bookings")
