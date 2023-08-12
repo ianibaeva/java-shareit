@@ -49,11 +49,7 @@ public class BookingController {
     public List<BookingOutDto> getAll(
             @RequestHeader((Constant.REQUEST_HEADER_USER_ID)) Long userId,
             @RequestParam(value = "state", defaultValue = "ALL") String state) {
-        State bookingState = State.from(state);
-        if (Objects.isNull(bookingState)) {
-            throw new IllegalArgumentException(String.format("Unknown state: %s", state));
-        }
-
+        State.from(state);
         return bookingService.getAllByBooker(userId, state);
     }
 
@@ -61,11 +57,7 @@ public class BookingController {
     public List<BookingOutDto> getAllByOwner(
             @RequestHeader((Constant.REQUEST_HEADER_USER_ID)) Long userId,
             @RequestParam(value = "state", defaultValue = "ALL") String state) {
-        State bookingState = State.from(state);
-        if (Objects.isNull(bookingState)) {
-            throw new IllegalArgumentException(String.format("Unknown state: %s", state));
-        }
-
+        State.from(state);
         return bookingService.getAllByOwner(userId, state);
     }
 }
