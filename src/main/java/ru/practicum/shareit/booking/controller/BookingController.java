@@ -5,8 +5,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingOutDto;
-import ru.practicum.shareit.enums.State;
 import ru.practicum.shareit.booking.service.BookingService;
+import ru.practicum.shareit.enums.State;
 import ru.practicum.shareit.util.Constant;
 import ru.practicum.shareit.util.Create;
 

@@ -1,7 +1,12 @@
 package ru.practicum.shareit.enums;
 
 public enum State {
-    ALL, CURRENT, PAST, FUTURE, WAITING, REJECTED;
+    ALL,
+    CURRENT,
+    PAST,
+    FUTURE,
+    WAITING,
+    REJECTED;
 
     public static State from(String state) {
         for (State value : State.values()) {
