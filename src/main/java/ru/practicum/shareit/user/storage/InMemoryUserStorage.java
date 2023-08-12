@@ -12,6 +12,7 @@ import ru.practicum.shareit.user.model.User;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Data
 @Slf4j
@@ -58,7 +59,7 @@ public class InMemoryUserStorage {
             throw new ValidationException(HttpStatus.BAD_REQUEST, "Username must not be blank or contain spaces");
         }
         for (User u : users.values()) {
-            if (u.getId() == user.getId()) {
+            if (Objects.equals(u.getId(), user.getId())) {
                 continue;
             }
             if (u.getEmail().equals(user.getEmail())) {
