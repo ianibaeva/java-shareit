@@ -28,8 +28,8 @@ public class BookingMapper {
                 booking.getStart(),
                 booking.getEnd(),
                 booking.getStatus(),
-                booking.getBooker(),
-                booking.getItem()
+                new BookingOutDto.User(booking.getBooker().getId(), booking.getBooker().getName()),
+                new BookingOutDto.Item(booking.getItem().getId(), booking.getItem().getName())
         );
     }
 
