@@ -11,7 +11,7 @@ import ru.practicum.shareit.user.model.User;
 
 @UtilityClass
 public class BookingMapper {
-    public static Booking toBooking(BookingDto bookingDto, Item item, User user) {
+    public Booking toBooking(BookingDto bookingDto, Item item, User user) {
         return new Booking(
                 null,
                 bookingDto.getStart(),
@@ -22,7 +22,7 @@ public class BookingMapper {
         );
     }
 
-    public static BookingOutDto toBookingDtoOut(Booking booking) {
+    public BookingOutDto toBookingDtoOut(Booking booking) {
         return new BookingOutDto(
                 booking.getId(),
                 booking.getStart(),
@@ -33,7 +33,7 @@ public class BookingMapper {
         );
     }
 
-    public static BookingItemDto toBookingItemDto(Booking booking) {
+    public BookingItemDto toBookingItemDto(Booking booking) {
         return new BookingItemDto(
                 booking.getId(),
                 booking.getBooker().getId()
