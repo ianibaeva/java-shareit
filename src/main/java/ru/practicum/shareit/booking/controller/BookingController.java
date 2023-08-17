@@ -3,7 +3,7 @@ package ru.practicum.shareit.booking.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.dto.BookItemRequestDto;
 import ru.practicum.shareit.booking.dto.BookingOutDto;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.enums.State;
@@ -23,7 +23,7 @@ public class BookingController {
     public BookingOutDto createBooking(
             @RequestHeader((Constant.REQUEST_HEADER_USER_ID)) Long userId,
             @Validated({Create.class})
-            @RequestBody BookingDto bookingDto) {
+            @RequestBody BookItemRequestDto bookingDto) {
         return bookingService.create(userId, bookingDto);
     }
 

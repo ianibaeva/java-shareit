@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.dto.BookItemRequestDto;
 import ru.practicum.shareit.booking.dto.BookingOutDto;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
@@ -18,6 +18,7 @@ import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,7 +38,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional
-    public BookingOutDto create(Long userId, BookingDto bookingDto) {
+    public BookingOutDto create(Long userId, @Valid BookItemRequestDto bookingDto) {
         User user = toUser(userService.getUserById(userId));
 
         Item item = itemRepository.findById(bookingDto.getItemId())
@@ -46,12 +47,24 @@ public class BookingServiceImpl implements BookingService {
                     return new ObjectNotFoundException(String.format("Item with ID %s not found", bookingDto.getItemId()));
                 });
 
-        bookingValidation(bookingDto, user, item);
+        if (!item.getAvailable()) {
+            throw new ValidationException(
+                    String.format("Item with ID %s not available.",
+                            item.getId())
+            );
+        }
+        if (user.getId().equals(item.getOwner().getId())) {
+            throw new ObjectNotFoundException(
+                    String.format("Item with ID %s not found",
+                            item.getId())
+            );
+        }
 
         Booking booking = toBooking(bookingDto, item, user);
 
         return BookingMapper.toBookingDtoOut(bookingRepository.save(booking));
     }
+
 
     @Override
     @Transactional
@@ -176,36 +189,6 @@ public class BookingServiceImpl implements BookingService {
                         .collect(Collectors.toList());
             default:
                 throw new IllegalArgumentException("Unknown state: UNSUPPORTED_STATUS");
-        }
-    }
-
-    private void bookingValidation(BookingDto bookingDto, User user, Item item) {
-        if (bookingDto.getStart().isBefore(LocalDateTime.now())) {
-            throw new ValidationException(
-                    String.format("Start date: %s cannot be before the current time",
-                            bookingDto.getStart()));
-        }
-        if (bookingDto.getStart().isAfter(bookingDto.getEnd())) {
-            throw new ValidationException(
-                    String.format("End date: %s cannot be before start date: %s",
-                            bookingDto.getEnd(), bookingDto.getStart()));
-        }
-        if (bookingDto.getStart().isEqual(bookingDto.getEnd())) {
-            throw new ValidationException(
-                    String.format("End date: %s cannot be equal to start date: %s",
-                            bookingDto.getEnd(), bookingDto.getStart()));
-        }
-        if (!item.getAvailable()) {
-            throw new ValidationException(
-                    String.format("Item with ID %s not available.",
-                            item.getId())
-            );
-        }
-        if (user.getId().equals(item.getOwner().getId())) {
-            throw new ObjectNotFoundException(
-                    String.format("Item with ID %s not found",
-                            item.getId())
-            );
         }
     }
 }
