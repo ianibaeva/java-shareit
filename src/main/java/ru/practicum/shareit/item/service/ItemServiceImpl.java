@@ -65,7 +65,6 @@ public class ItemServiceImpl implements ItemService {
         }
 
         if (!itemOptional.get().getOwner().getId().equals(userId)) {
-            log.debug("User with ID {} is not the owner of item with ID {}.", userId, itemId);
             throw new ForbiddenException(String.format("User with ID %s " +
                     "is not the owner of item with ID %s.", userId, itemId));
         }
@@ -96,11 +95,8 @@ public class ItemServiceImpl implements ItemService {
         userService.getUserById(userId);
 
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> {
-                    log.debug("User with ID {} does not have an item with ID {}", userId, itemId);
-                    return new ObjectNotFoundException(String.format("User with ID: %s " +
-                            "does not have an item with ID: %s.", userId, itemId));
-                });
+                .orElseThrow(() -> new ObjectNotFoundException(String.format("User with ID: %s " +
+                        "does not have an item with ID: %s.", userId, itemId)));
 
         ItemDto itemDto = toItemDto(item);
         itemDto.setComments(getAllComments(itemId));
@@ -166,16 +162,12 @@ public class ItemServiceImpl implements ItemService {
 
         Optional<Item> itemOptional = itemRepository.findById(itemId);
 
-        Item item = itemOptional.orElseThrow(() -> {
-            log.error("User with ID {} does not have an item with ID {}", userId, itemId);
-            return new ObjectNotFoundException(String.format("User with ID: %s " +
-                    "does not have an item with ID: %s.", userId, itemId));
-        });
+        Item item = itemOptional.orElseThrow(() -> new ObjectNotFoundException(String.format("User with ID: %s " +
+                "does not have an item with ID: %s.", userId, itemId)));
 
         List<Booking> userBookings = bookingRepository.findAllByUserBookings(userId, itemId, LocalDateTime.now());
 
         if (userBookings.isEmpty()) {
-            log.error("User with ID {} must have at least one booking for the item with ID {}.", userId, itemId);
             throw new ValidationException(String.format("User with ID %s must have at least one booking " +
                     "for the item with ID %s.", userId, itemId));
         }

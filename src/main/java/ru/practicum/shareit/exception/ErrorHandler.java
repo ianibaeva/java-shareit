@@ -19,14 +19,14 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
         String message = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
-        log.warn("WARNING: Object validation failed due to invalid arguments");
+        log.warn("Received status 400 BAD_REQUEST: {}", e.getMessage(), e);
         return new ErrorResponse(message);
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(final ValidationException e) {
-        log.warn("WARNING: User validation");
+        log.warn("Received status 400 BAD_REQUEST: {}", e.getMessage(), e);
         return new ErrorResponse(
                 e.getMessage()
         );
@@ -35,7 +35,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleObjectNotFoundException(final ObjectNotFoundException e) {
-        log.warn("WARNING: Object not found");
+        log.warn("Received status 404 NOT_FOUND: {}", e.getMessage(), e);
         return new ErrorResponse(
                 e.getMessage()
         );
@@ -44,7 +44,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleConflictException(final ConflictException e) {
-        log.warn("VALIDATION WARNING: Field duplication detected");
+        log.warn("Received status 409 CONFLICT: {}", e.getMessage(), e);
         return new ErrorResponse(
                 e.getMessage()
         );
@@ -53,7 +53,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleDataIntegrityViolationException(final DataIntegrityViolationException e) {
-        log.warn("VALIDATION WARNING: Field duplication detected");
+        log.warn("Received status 409 CONFLICT: {}", e.getMessage(), e);
         return new ErrorResponse(
                 e.getMessage()
         );
@@ -62,7 +62,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorResponse handleForbiddenException(final ForbiddenException e) {
-        log.warn("Access denied without authorization");
+        log.warn("Received status 403 FORBIDDEN: {}", e.getMessage(), e);
         return new ErrorResponse(
                 e.getMessage()
         );
@@ -71,7 +71,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleOtherException(final RuntimeException e) {
-        log.warn("UNKNOWN SERVER ERROR: Runtime exception");
+        log.warn("Received status 500 INTERNAL_SERVER_ERROR: {}", e.getMessage(), e);
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         e.printStackTrace(pw);
@@ -85,7 +85,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleException(final Exception e) {
-        log.warn("UNKNOWN SERVER ERROR: Exception");
+        log.warn("Received status 500 INTERNAL_SERVER_ERROR: {}", e.getMessage(), e);
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         e.printStackTrace(pw);
@@ -99,7 +99,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleConstraintViolationException(ConstraintViolationException e) {
-        log.info(e.getMessage(), e);
+        log.info("Received status 400 BAD_REQUEST: {}", e.getMessage(), e);
         return new ErrorResponse(e.getMessage());
     }
 }

@@ -1,7 +1,6 @@
 package ru.practicum.shareit.booking.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookItemRequestDto;
@@ -27,7 +26,6 @@ import static ru.practicum.shareit.booking.mapper.BookingMapper.toBooking;
 import static ru.practicum.shareit.booking.mapper.BookingMapper.toBookingDtoOut;
 import static ru.practicum.shareit.user.mapper.UserMapper.toUser;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
@@ -42,10 +40,7 @@ public class BookingServiceImpl implements BookingService {
         User user = toUser(userService.getUserById(userId));
 
         Item item = itemRepository.findById(bookingDto.getItemId())
-                .orElseThrow(() -> {
-                    log.debug("Item with ID {} not found", bookingDto.getItemId());
-                    return new ObjectNotFoundException(String.format("Item with ID %s not found", bookingDto.getItemId()));
-                });
+                .orElseThrow(() -> new ObjectNotFoundException(String.format("Item with ID %s not found", bookingDto.getItemId())));
 
         if (!item.getAvailable()) {
             throw new ValidationException(
@@ -70,19 +65,14 @@ public class BookingServiceImpl implements BookingService {
     @Transactional
     public BookingOutDto update(Long userId, Long bookingId, Boolean approved) {
         Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> {
-                    log.debug("Booking with ID {} not found", bookingId);
-                    return new ObjectNotFoundException(String.format("Booking with ID %s not found", bookingId));
-                });
+                .orElseThrow(() -> new ObjectNotFoundException(String.format("Booking with ID %s not found", bookingId)));
 
         if (!booking.getItem().getOwner().getId().equals(userId)) {
-            log.debug("User with ID {} is not the owner of item with ID {}", userId, booking.getItem().getId());
             throw new ObjectNotFoundException(String.format("User with ID %s is not the owner of item with ID %s",
                     userId, booking.getItem().getId()));
         }
 
         if (!booking.getStatus().equals(Status.WAITING)) {
-            log.debug("Status of the booking with ID {} has already been updated", booking.getId());
             throw new ValidationException(String.format("Status of the booking with ID %s has already been updated",
                     booking.getId()));
         }
@@ -100,14 +90,10 @@ public class BookingServiceImpl implements BookingService {
     @Transactional(readOnly = true)
     public BookingOutDto getById(Long userId, Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> {
-                    log.debug("Booking with ID {} not found", bookingId);
-                    return new ObjectNotFoundException(String.format("Booking with ID %s not found", bookingId));
-                });
+                .orElseThrow(() -> new ObjectNotFoundException(String.format("Booking with ID %s not found", bookingId)));
 
         if (!booking.getBooker().getId().equals(userId)
                 && !booking.getItem().getOwner().getId().equals(userId)) {
-            log.debug("User with ID {} is not the owner or booker", userId);
             throw new ObjectNotFoundException(String.format("User with ID %s is not the owner or booker", userId));
         }
 

@@ -1,7 +1,6 @@
 package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.ObjectNotFoundException;
@@ -17,7 +16,6 @@ import java.util.stream.Collectors;
 import static ru.practicum.shareit.user.mapper.UserMapper.toUser;
 import static ru.practicum.shareit.user.mapper.UserMapper.toUserDto;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -36,7 +34,6 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(UserDto userDto, Long userId) {
         User userFromStorage = userRepository.findById(userId).orElseThrow(
                 () -> {
-                    log.debug("User with ID {} not found", userId);
                     throw new ObjectNotFoundException(String.format("User with ID: %s not found", userId));
                 }
         );
@@ -55,7 +52,6 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserById(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> {
-                    log.debug("User with ID {} not found", userId);
                     throw new ObjectNotFoundException(String.format("User with ID: %s not found", userId));
                 }
         );
@@ -76,7 +72,6 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findById(userId).isPresent()) {
             userRepository.deleteById(userId);
         } else {
-            log.debug("User with ID {} not found", userId);
             throw new ObjectNotFoundException(String.format("User with ID: %s not found", userId));
         }
     }
