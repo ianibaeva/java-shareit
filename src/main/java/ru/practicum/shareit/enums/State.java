@@ -8,13 +8,13 @@ public enum State {
     WAITING,
     REJECTED;
 
-    public static void from(String state) {
+    public static State from(String state) {
         try {
-            State.valueOf(state.toUpperCase());
+            return State.valueOf(state.toUpperCase());
         } catch (IllegalArgumentException e) {
             for (State value : State.values()) {
                 if (value.name().equals(state)) {
-                    return;
+                    return value;
                 }
             }
             throw new IllegalArgumentException(String.format("Unknown state: %s", state));

@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookItemRequestDto;
 import ru.practicum.shareit.booking.dto.BookingOutDto;
 import ru.practicum.shareit.booking.service.BookingService;
-import ru.practicum.shareit.enums.State;
 import ru.practicum.shareit.util.Constant;
 import ru.practicum.shareit.util.Create;
 
@@ -48,7 +47,6 @@ public class BookingController {
     public List<BookingOutDto> getAll(
             @RequestHeader((Constant.REQUEST_HEADER_USER_ID)) Long userId,
             @RequestParam(value = "state", defaultValue = "ALL") String state) {
-        State.from(state);
         return bookingService.getAllByBooker(userId, state);
     }
 
@@ -56,7 +54,6 @@ public class BookingController {
     public List<BookingOutDto> getAllByOwner(
             @RequestHeader((Constant.REQUEST_HEADER_USER_ID)) Long userId,
             @RequestParam(value = "state", defaultValue = "ALL") String state) {
-        State.from(state);
         return bookingService.getAllByOwner(userId, state);
     }
 }

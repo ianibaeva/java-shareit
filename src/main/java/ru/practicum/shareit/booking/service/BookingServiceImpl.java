@@ -17,13 +17,13 @@ import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
-import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.practicum.shareit.booking.mapper.BookingMapper.toBooking;
 import static ru.practicum.shareit.booking.mapper.BookingMapper.toBookingDtoOut;
+import static ru.practicum.shareit.enums.State.from;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +35,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional
-    public BookingOutDto create(Long userId, @Valid BookItemRequestDto bookingDto) {
+    public BookingOutDto create(Long userId, BookItemRequestDto bookingDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
@@ -106,7 +106,8 @@ public class BookingServiceImpl implements BookingService {
         userRepository.findById(userId)
                 .orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
-        switch (State.valueOf(state)) {
+        State bookingState = from(state);
+        switch (bookingState) {
             case ALL:
                 return bookingRepository.findAllByBookerId(userId).stream()
                         .map(BookingMapper::toBookingDtoOut)
@@ -146,7 +147,8 @@ public class BookingServiceImpl implements BookingService {
         userRepository.findById(userId)
                 .orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
-        switch (State.valueOf(state)) {
+        State bookingState = from(state);
+        switch (bookingState) {
             case ALL:
                 return bookingRepository.findAllByOwnerId(userId).stream()
                         .map(BookingMapper::toBookingDtoOut)

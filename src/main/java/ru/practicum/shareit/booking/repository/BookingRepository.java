@@ -1,10 +1,14 @@
 package ru.practicum.shareit.booking.repository;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.enums.Status;
+import ru.practicum.shareit.item.model.Item;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -105,7 +109,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query(value = "SELECT * FROM bookings b " +
             "JOIN items i ON i.id = b.item_id " +
             "WHERE b.item_id = :itemId " +
-            "AND b.start_date < :currentTime " +
+            "AND b.start_date <= :currentTime " +
             "AND b.status = 'APPROVED' " +
             "ORDER BY b.start_date DESC LIMIT 1",
             nativeQuery = true)
@@ -119,4 +123,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "ORDER BY b.start_date ASC LIMIT 1",
             nativeQuery = true)
     Optional<Booking> getNextBooking(Long itemId, LocalDateTime currentTime);
+
+    List<Booking> findAllByItemInAndStatus(Collection<Item> items, Status status, Sort sort);
 }
