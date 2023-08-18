@@ -18,7 +18,7 @@ import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.service.UserService;
+import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -32,14 +32,13 @@ import static ru.practicum.shareit.item.comment.mapper.CommentMapper.toComment;
 import static ru.practicum.shareit.item.comment.mapper.CommentMapper.toCommentDto;
 import static ru.practicum.shareit.item.mapper.ItemMapper.toItem;
 import static ru.practicum.shareit.item.mapper.ItemMapper.toItemDto;
-import static ru.practicum.shareit.user.mapper.UserMapper.toUser;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
-    private final UserService userService;
+    private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
 
@@ -48,7 +47,8 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto addItem(ItemDto itemDto, Long userId) {
         Item item = toItem(itemDto);
 
-        User user = toUser(userService.getUserById(userId));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ObjectNotFoundException("User not found"));
         item.setOwner(user);
 
         return toItemDto(itemRepository.save(item));
@@ -92,7 +92,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional(readOnly = true)
     public ItemDto getItemById(Long itemId, Long userId) {
-        userService.getUserById(userId);
+        userRepository.findById(userId)
+                .orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ObjectNotFoundException(String.format("User with ID: %s " +
@@ -113,7 +114,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional(readOnly = true)
     public List<ItemDto> getAllUserItems(Long userId) {
-        userService.getUserById(userId);
+        userRepository.findById(userId)
+                .orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
         List<ItemDto> items = itemRepository.findAllByOwnerIdOrderByIdAsc(userId)
                 .stream()
@@ -132,7 +134,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional(readOnly = true)
     public List<ItemDto> getAvailableItemBySearch(String text, Long userId) {
-        userService.getUserById(userId);
+        userRepository.findById(userId)
+                .orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
         if (text.isBlank()) {
             return Collections.emptyList();
@@ -158,7 +161,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public CommentDto createComment(Long userId, CommentDto commentDto, Long itemId) {
-        User user = toUser(userService.getUserById(userId));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
         Optional<Item> itemOptional = itemRepository.findById(itemId);
 
