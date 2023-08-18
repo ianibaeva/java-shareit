@@ -19,6 +19,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
+import ru.practicum.shareit.util.Constant;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -141,10 +142,8 @@ public class ItemServiceImpl implements ItemService {
             return Collections.emptyList();
         }
 
-        return itemRepository.findAll().stream()
-                .filter(Item::getAvailable)
-                .filter(item -> item.getName().toLowerCase().contains(text.toLowerCase())
-                        || item.getDescription().toLowerCase().contains(text.toLowerCase()))
+        return itemRepository.searchAvailableItemsByNameOrDescription(text, Constant.SORT_BY_ID_ASC)
+                .stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
     }
