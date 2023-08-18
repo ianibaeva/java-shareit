@@ -71,11 +71,11 @@ public class ItemServiceImpl implements ItemService {
 
         Item item = toItem(itemDto);
 
-        if (Objects.isNull(item.getName())) {
+        if (Objects.isNull(item.getName()) || item.getName().isBlank()) {
             item.setName(itemOptional.get().getName());
         }
 
-        if (Objects.isNull(item.getDescription())) {
+        if (Objects.isNull(item.getDescription()) || item.getDescription().isBlank()) {
             item.setDescription(itemOptional.get().getDescription());
         }
 

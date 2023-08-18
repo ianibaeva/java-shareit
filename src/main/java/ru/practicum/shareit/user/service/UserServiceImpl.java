@@ -38,10 +38,10 @@ public class UserServiceImpl implements UserService {
                 }
         );
 
-        if (!Objects.isNull(userDto.getEmail())) {
+        if (Objects.nonNull(userDto.getEmail()) && !userDto.getEmail().isBlank()) {
             userFromStorage.setEmail(userDto.getEmail());
         }
-        if (!Objects.isNull(userDto.getName())) {
+        if (Objects.nonNull(userDto.getName()) && !userDto.getName().isBlank()) {
             userFromStorage.setName(userDto.getName());
         }
         return toUserDto(userRepository.save(userFromStorage));
