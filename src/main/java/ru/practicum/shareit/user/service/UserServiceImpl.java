@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
         if (Objects.nonNull(userDto.getName()) && !userDto.getName().isBlank()) {
             userFromStorage.setName(userDto.getName());
         }
-        return toUserDto(userRepository.save(userFromStorage));
+        return toUserDto(userFromStorage);
     }
 
     @Override
