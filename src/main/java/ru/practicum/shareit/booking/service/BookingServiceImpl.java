@@ -15,7 +15,7 @@ import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.service.UserService;
+import ru.practicum.shareit.user.repository.UserRepository;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -24,20 +24,20 @@ import java.util.stream.Collectors;
 
 import static ru.practicum.shareit.booking.mapper.BookingMapper.toBooking;
 import static ru.practicum.shareit.booking.mapper.BookingMapper.toBookingDtoOut;
-import static ru.practicum.shareit.user.mapper.UserMapper.toUser;
 
 @Service
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
-    private final UserService userService;
+    private final UserRepository userRepository;
     private final ItemRepository itemRepository;
 
     @Override
     @Transactional
     public BookingOutDto create(Long userId, @Valid BookItemRequestDto bookingDto) {
-        User user = toUser(userService.getUserById(userId));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
         Item item = itemRepository.findById(bookingDto.getItemId())
                 .orElseThrow(() -> new ObjectNotFoundException(String.format("Item with ID %s not found", bookingDto.getItemId())));
@@ -103,7 +103,8 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional(readOnly = true)
     public List<BookingOutDto> getAllByBooker(Long userId, String state) {
-        userService.getUserById(userId);
+        userRepository.findById(userId)
+                .orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
         switch (State.valueOf(state)) {
             case ALL:
@@ -142,7 +143,8 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional(readOnly = true)
     public List<BookingOutDto> getAllByOwner(Long userId, String state) {
-        userService.getUserById(userId);
+        userRepository.findById(userId)
+                .orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
         switch (State.valueOf(state)) {
             case ALL:

@@ -1,7 +1,6 @@
 package ru.practicum.shareit.validator;
 
 import ru.practicum.shareit.booking.dto.BookItemRequestDto;
-import ru.practicum.shareit.validator.StartBeforeEndDateValid;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class CommentDto {
+public class CommentResponseDto {
     public static final String DATE_FORMAT = "yyyy-MM-ddTHH:mm:ss";
     private Long id;
 

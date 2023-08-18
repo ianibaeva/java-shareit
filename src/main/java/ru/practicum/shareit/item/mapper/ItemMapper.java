@@ -1,29 +1,35 @@
 package ru.practicum.shareit.item.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.booking.dto.BookingItemDto;
+import ru.practicum.shareit.item.comment.dto.CommentResponseDto;
+import ru.practicum.shareit.item.dto.ItemDtoOut;
+import ru.practicum.shareit.item.dto.ItemResponseDto;
 import ru.practicum.shareit.item.model.Item;
+
+import java.util.List;
 
 @UtilityClass
 public class ItemMapper {
-    public static ItemDto toItemDto(Item item) {
-        return new ItemDto(
+    public static ItemResponseDto toItemDto(Item item, List<CommentResponseDto> comments,
+                                            BookingItemDto lastBooking, BookingItemDto nextBooking) {
+        return new ItemResponseDto(
                 item.getId(),
                 item.getName(),
                 item.getDescription(),
                 item.getAvailable(),
-                null,
-                null,
-                null
+                lastBooking,
+                nextBooking,
+                comments
         );
     }
 
-    public static Item toItem(ItemDto itemDto) {
+    public static Item toItem(ItemDtoOut itemDtoOut) {
         return new Item(
-                itemDto.getId(),
-                itemDto.getName(),
-                itemDto.getDescription(),
-                itemDto.getAvailable(),
+                null,
+                itemDtoOut.getName(),
+                itemDtoOut.getDescription(),
+                itemDtoOut.getAvailable(),
                 null,
                 null
         );
