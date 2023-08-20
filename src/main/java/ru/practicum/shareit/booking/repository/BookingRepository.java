@@ -8,7 +8,6 @@ import ru.practicum.shareit.enums.Status;
 import ru.practicum.shareit.item.model.Item;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -124,5 +123,5 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             nativeQuery = true)
     Optional<Booking> getNextBooking(Long itemId, LocalDateTime currentTime);
 
-    List<Booking> findAllByItemInAndStatus(Collection<Item> items, Status status, Sort sort);
+    List<Booking> findAllByItemInAndStatus(List<Item> items, Status status, Sort sort);
 }

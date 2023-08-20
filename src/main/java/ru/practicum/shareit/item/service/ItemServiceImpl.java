@@ -30,7 +30,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 import static ru.practicum.shareit.booking.mapper.BookingMapper.toBookingItemDto;
 import static ru.practicum.shareit.item.comment.mapper.CommentMapper.toComment;
@@ -137,28 +136,38 @@ public class ItemServiceImpl implements ItemService {
                 Constant.SORT_BY_CREATED_DESC
         ).stream().collect(Collectors.groupingBy(CommentResponseDto::getId));
 
+        Map<Long, Item> itemMap = itemRepository.findAllById(
+                        items.stream().map(ItemResponseDto::getId).collect(Collectors.toList())
+                ).stream()
+                .collect(Collectors.toMap(Item::getId, item -> item));
+
+        List<Item> uniqueItems = items.stream()
+                .map(itemDto -> itemMap.get(itemDto.getId()))
+                .collect(Collectors.toList());
+
+        List<Booking> approvedBookings = bookingRepository.findAllByItemInAndStatus(
+                uniqueItems, Status.APPROVED, Constant.SORT_BY_START_DESC);
+        Map<Long, List<Booking>> itemBookingsMap = approvedBookings.stream()
+                .collect(Collectors.groupingBy(booking -> booking.getItem().getId()));
+
         List<ItemResponseDto> results = new ArrayList<>();
         for (ItemResponseDto itemDto : items) {
-            Item item = itemRepository.findById(itemDto.getId())
-                    .orElseThrow(() -> new ObjectNotFoundException(
-                            String.format("Item with ID %s not found", itemDto.getId())));
+            Item item = itemMap.get(itemDto.getId());
+            List<Booking> itemBookings = itemBookingsMap.getOrDefault(item.getId(), Collections.emptyList());
 
-            List<Booking> approvedBookings = bookingRepository.findAllByItemInAndStatus(
-                    Collections.singletonList(item), Status.APPROVED, Constant.SORT_BY_START_DESC);
-
-            BookingItemDto lastBookingDto = approvedBookings.stream()
-                    .filter(booking -> booking.getStart().isBefore(currentTime))
-                    .max(comparing(Booking::getStart))
+            BookingItemDto lastBookingDto = itemBookings.stream()
+                    .filter(booking -> !booking.getStart().isAfter(currentTime))
+                    .findFirst()
                     .map(BookingMapper::toBookingItemDto)
                     .orElse(null);
 
-            BookingItemDto nextBookingDto = approvedBookings.stream()
+            BookingItemDto nextBookingDto = itemBookings.stream()
                     .filter(booking -> booking.getStart().isAfter(currentTime))
-                    .min(comparing(Booking::getStart))
+                    .reduce((first, second) -> second)
                     .map(BookingMapper::toBookingItemDto)
                     .orElse(null);
 
-            List<CommentResponseDto> comments = commentsMap.getOrDefault(item.getId(), Collections.emptyList());
+            List<CommentResponseDto> comments = commentsMap.getOrDefault(itemDto.getId(), Collections.emptyList());
 
             ItemResponseDto itemResponseDto = ItemMapper.toItemDto(item, comments, lastBookingDto, nextBookingDto);
             results.add(itemResponseDto);
