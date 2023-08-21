@@ -1,75 +1,78 @@
 package ru.practicum.shareit.user.service;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.exception.ValidationException;
+import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.exception.ObjectNotFoundException;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.storage.InMemoryUserStorage;
+import ru.practicum.shareit.user.repository.UserRepository;
 
-import java.util.Collection;
-import java.util.NoSuchElementException;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import static ru.practicum.shareit.user.mapper.UserMapper.toUser;
+import static ru.practicum.shareit.user.mapper.UserMapper.toUserDto;
 
 @Service
-@Slf4j
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final InMemoryUserStorage inMemoryUserStorage;
+    private final UserRepository userRepository;
 
-    public UserServiceImpl(InMemoryUserStorage inMemoryUserStorage) {
-        this.inMemoryUserStorage = inMemoryUserStorage;
+    @Override
+    @Transactional
+    public UserDto addUser(UserDto userDto) {
+        User user = toUser(userDto);
+        return toUserDto(userRepository.save(user));
     }
 
     @Override
-    public Collection<User> getAllUsers() {
-        return inMemoryUserStorage.getAllUsers();
+    @Transactional
+    public UserDto updateUser(UserDto userDto, Long userId) {
+        User userFromStorage = userRepository.findById(userId).orElseThrow(
+                () -> {
+                    throw new ObjectNotFoundException(String.format("User with ID: %s not found", userId));
+                }
+        );
+
+        if (Objects.nonNull(userDto.getEmail()) && !userDto.getEmail().isBlank()) {
+            userFromStorage.setEmail(userDto.getEmail());
+        }
+        if (Objects.nonNull(userDto.getName()) && !userDto.getName().isBlank()) {
+            userFromStorage.setName(userDto.getName());
+        }
+        return toUserDto(userFromStorage);
     }
 
     @Override
-    public User getById(int id) {
-        try {
-            User user = inMemoryUserStorage.getById(id);
-            if (user == null) {
-                throw new ValidationException(HttpStatus.NOT_FOUND, "User not found");
-            }
-            return user;
-        } catch (NoSuchElementException e) {
-            log.error("User not found with ID: {}", id);
-            throw new ValidationException(HttpStatus.NOT_FOUND, "User not found");
-        }
+    @Transactional(readOnly = true)
+    public UserDto getUserById(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> {
+                    throw new ObjectNotFoundException(String.format("User with ID: %s not found", userId));
+                }
+        );
+        return toUserDto(user);
     }
 
     @Override
-    public User addUser(User user) {
-        return inMemoryUserStorage.addUser(user);
+    @Transactional(readOnly = true)
+    public List<UserDto> getAllUsers() {
+        return userRepository.findAll()
+                .stream().map(UserMapper::toUserDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public void updateUser(User user, int id) {
-        User existingUser = inMemoryUserStorage.getById(id);
-        if (existingUser == null) {
-            throw new ValidationException(HttpStatus.NOT_FOUND, "User not found");
+    @Transactional
+    public void deleteUser(Long userId) {
+        if (userRepository.existsById(userId)) {
+            userRepository.deleteById(userId);
+        } else {
+            throw new ObjectNotFoundException(String.format("User with ID: %s not found", userId));
         }
-        if (user.getId() == 0) {
-            user.setId(existingUser.getId());
-        }
-        if (user.getName() == null) {
-            user.setName(existingUser.getName());
-        }
-        if (user.getEmail() == null) {
-            user.setEmail(existingUser.getEmail());
-        }
-        try {
-            inMemoryUserStorage.updateUser(user, id);
-            log.info("User {} has been updated", user.toString().toUpperCase());
-        } catch (ValidationException e) {
-            log.error("Error updating user with ID {}: {}", id, e.getMessage());
-            throw e;
-        }
-    }
-
-    @Override
-    public void deleteUser(int id) {
-        inMemoryUserStorage.deleteUser(id);
     }
 }

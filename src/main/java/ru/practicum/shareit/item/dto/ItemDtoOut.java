@@ -1,4 +1,4 @@
-package ru.practicum.shareit.user.dto;
+package ru.practicum.shareit.item.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,22 +6,23 @@ import lombok.NoArgsConstructor;
 import ru.practicum.shareit.util.Create;
 import ru.practicum.shareit.util.Update;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
-    private Long id;
+@AllArgsConstructor
+public class ItemDtoOut {
 
     @NotBlank(groups = {Create.class}, message = "Name is required and must have at least 1 character")
     @Size(groups = {Create.class, Update.class}, min = 1, message = "Name is required and must have at least 1 character")
     private String name;
 
-    @NotBlank(groups = {Create.class}, message = "Email is required and must have at least 1 character")
-    @Email(groups = {Update.class, Create.class}, message = "Invalid email format")
-    @Size(groups = {Create.class, Update.class}, min = 1, message = "Invalid email format")
-    private String email;
+    @NotBlank(groups = {Create.class}, message = "Description is required and must have at least 1 character")
+    @Size(groups = {Create.class, Update.class}, min = 1, message = "Description is required and must have at least 1 character")
+    private String description;
+
+    @NotNull(groups = {Create.class})
+    private Boolean available;
 }
