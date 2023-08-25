@@ -8,7 +8,9 @@ import ru.practicum.shareit.booking.dto.BookingOutDto;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.util.Constant;
 import ru.practicum.shareit.util.Create;
+import ru.practicum.shareit.validator.PageValidator;
 
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
@@ -46,14 +48,20 @@ public class BookingController {
     @GetMapping
     public List<BookingOutDto> getAll(
             @RequestHeader((Constant.REQUEST_HEADER_USER_ID)) Long userId,
-            @RequestParam(value = "state", defaultValue = "ALL") String state) {
-        return bookingService.getAllByBooker(userId, state);
+            @RequestParam(value = "state", defaultValue = "ALL") String state,
+            @RequestParam(defaultValue = "0") @Min(0) Integer from,
+            @RequestParam(defaultValue = "10") @Min(1) Integer size) {
+        PageValidator.validatePageParameters(from, size);
+        return bookingService.getAllByBooker(userId, state, from, size);
     }
 
     @GetMapping("/owner")
     public List<BookingOutDto> getAllByOwner(
             @RequestHeader((Constant.REQUEST_HEADER_USER_ID)) Long userId,
-            @RequestParam(value = "state", defaultValue = "ALL") String state) {
-        return bookingService.getAllByOwner(userId, state);
+            @RequestParam(value = "state", defaultValue = "ALL") String state,
+            @RequestParam(defaultValue = "0") @Min(0) Integer from,
+            @RequestParam(defaultValue = "10") @Min(1) Integer size) {
+        PageValidator.validatePageParameters(from, size);
+        return bookingService.getAllByOwner(userId, state, from, size);
     }
 }

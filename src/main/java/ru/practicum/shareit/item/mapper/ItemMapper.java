@@ -3,6 +3,7 @@ package ru.practicum.shareit.item.mapper;
 import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.booking.dto.BookingItemDto;
 import ru.practicum.shareit.item.comment.dto.CommentResponseDto;
+import ru.practicum.shareit.item.dto.ItemDtoForRequests;
 import ru.practicum.shareit.item.dto.ItemDtoOut;
 import ru.practicum.shareit.item.dto.ItemResponseDto;
 import ru.practicum.shareit.item.model.Item;
@@ -20,7 +21,8 @@ public class ItemMapper {
                 item.getAvailable(),
                 lastBooking,
                 nextBooking,
-                comments
+                comments,
+                item.getRequestId()
         );
     }
 
@@ -31,7 +33,15 @@ public class ItemMapper {
                 itemDtoOut.getDescription(),
                 itemDtoOut.getAvailable(),
                 null,
-                null
+                itemDtoOut.getRequestId()
         );
+    }
+
+    public static ItemDtoForRequests toItemDtoShort(Item item) {
+        return new ItemDtoForRequests(item.getId(),
+                item.getName(),
+                item.getDescription(),
+                item.getAvailable(),
+                item.getRequestId());
     }
 }
