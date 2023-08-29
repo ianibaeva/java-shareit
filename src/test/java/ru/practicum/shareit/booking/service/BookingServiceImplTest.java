@@ -128,13 +128,10 @@ class BookingServiceImplTest {
 
         BookingOutDto expectedBookingDtoOut = toBookingDtoOut(toBooking(bookingDto, item, user));
 
-        // Mock the behavior of userRepository.findById() to return the mock User object
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
-        // Mock the behavior of itemRepository.findById() to return the item
         when(itemRepository.findById(anyLong())).thenReturn(Optional.of(item));
 
-        // Mock the behavior of bookingRepository.save() to return a mock Booking object
         when(bookingRepository.save(any(Booking.class))).thenReturn(toBooking(bookingDto, item, user));
 
         BookingOutDto actualBookingDtoOut = bookingService.create(userDto.getId(), bookingDto);
@@ -143,22 +140,19 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void testCreateBooking_UserNotFound() {
+    void testCreateBooking_UserIsNotFound() {
         Long userId = userDto.getId();
-        BookItemRequestDto bookingDto = new BookItemRequestDto(/* Initialize DTO here */);
+        BookItemRequestDto bookingDto = new BookItemRequestDto();
 
-        // Mock userRepository.findById() to return an empty Optional (user not found)
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
-        // Assert that the ObjectNotFoundException is thrown
         assertThrows(ObjectNotFoundException.class, () -> bookingService.create(userId, bookingDto));
 
-        // Make sure no interaction with other repositories occurred
         verifyNoInteractions(itemRepository, bookingRepository);
     }
 
     @Test
-    void testCreateBooking_ItemNotAvailable() {
+    void testCreateBooking_ItemIsNotAvailable() {
         Long userId = userDto.getId();
         item.setAvailable(false);
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
@@ -172,7 +166,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void testCreateBooking_ItemNotFound() {
+    void testCreateBooking_ItemIsNotFound() {
         Long userId = userDto.getId();
         item.setOwner(user);
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
@@ -197,7 +191,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void update_whenStatusNotApproved() {
+    void update_whenStatusIsNotApproved() {
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(bookingWaiting));
         when(bookingRepository.save(any(Booking.class))).thenReturn(bookingWaiting);
 
@@ -207,7 +201,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void update_whenStatusNotWaiting() {
+    void update_whenStatusIsNotWaiting() {
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking));
 
         ValidationException bookingValidationException = assertThrows(ValidationException.class,
@@ -218,7 +212,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void update_whenUserIsNotItemOwner_thenThrowNotFoundException() {
+    void update_whenUserIsNotTheItemOwner_ThrowsNotFoundException() {
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking));
 
         ObjectNotFoundException bookingNotFoundException = assertThrows(ObjectNotFoundException.class,
@@ -239,7 +233,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void getById_whenBookingIdIsNotValid_thenThrowObjectNotFoundException() {
+    void getById_whenBookingIdIsNotValid_ThrowsObjectNotFoundException() {
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         ObjectNotFoundException bookingNotFoundException = assertThrows(ObjectNotFoundException.class,
@@ -249,7 +243,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void getById_whenUserIsNotItemOwner_thenThrowObjectNotFoundException() {
+    void getById_whenUserIsNotTheItemOwner_ThrowsObjectNotFoundException() {
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking));
 
         ObjectNotFoundException bookingNotFoundException = assertThrows(ObjectNotFoundException.class,
@@ -259,7 +253,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void getAllByBooker_whenBookingStateAll() {
+    void getAllByBooker_whenBookingStateIsAll() {
         Long userId = userDto.getId();
         List<BookingOutDto> expectedBookingsDtoOut = List.of(toBookingDtoOut(booking));
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
@@ -271,7 +265,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void getAllByBooker_whenBookingStateCURRENT() {
+    void getAllByBooker_whenBookingStateIsCURRENT() {
         Long userId = userDto.getId();
         List<BookingOutDto> expectedBookingsDtoOut = List.of(toBookingDtoOut(booking));
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
@@ -284,7 +278,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void getAllByBooker_whenBookingStatePAST() {
+    void getAllByBooker_whenBookingStateIsPAST() {
         Long userId = userDto.getId();
         List<BookingOutDto> expectedBookingsDtoOut = List.of(toBookingDtoOut(booking));
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
@@ -297,7 +291,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void getAllByBooker_whenBookingStateFUTURE() {
+    void getAllByBooker_whenBookingStateIsFUTURE() {
         Long userId = userDto.getId();
         List<BookingOutDto> expectedBookingsDtoOut = List.of(toBookingDtoOut(booking));
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
@@ -310,7 +304,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void getAllByBooker_whenBookingStateWAITING() {
+    void getAllByBooker_whenBookingStateIsWAITING() {
         Long userId = userDto.getId();
         List<BookingOutDto> expectedBookingsDtoOut = List.of(toBookingDtoOut(booking));
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
@@ -323,7 +317,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void getAllByBooker_whenBookingStateREJECTED() {
+    void getAllByBooker_whenBookingStateIsREJECTED() {
         Long userId = userDto.getId();
         List<BookingOutDto> expectedBookingsDtoOut = List.of(toBookingDtoOut(booking));
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
@@ -336,7 +330,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void getAllByBooker_whenBookingStateIsNotValid_thenThrowIllegalArgumentException() {
+    void getAllByBooker_whenBookingStateIsNotValid_ThrowsIllegalArgumentException() {
         Long userId = userDto.getId();
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
@@ -345,7 +339,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void getAllByOwner_whenBookingStateAll() {
+    void getAllByOwner_whenBookingStateIsAll() {
         Long userId = userDto.getId();
         List<BookingOutDto> expectedBookingsDtoOut = List.of(toBookingDtoOut(booking));
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
@@ -357,7 +351,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void getAllByOwner_whenBookingStateCURRENT() {
+    void getAllByOwner_whenBookingStateIsCURRENT() {
         Long userId = userDto.getId();
         List<BookingOutDto> expectedBookingsDtoOut = List.of(toBookingDtoOut(booking));
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
@@ -370,8 +364,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Тестирование получения всех бронирований владельцем со статусом PAST")
-    void getAllByOwner_whenBookingStatePAST() {
+    void getAllByOwner_whenBookingStateIsPAST() {
         Long userId = userDto.getId();
         List<BookingOutDto> expectedBookingsDtoOut = List.of(toBookingDtoOut(booking));
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
@@ -384,8 +377,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Тестирование получения всех бронирований владельцем со статусом FUTURE")
-    void getAllByOwner_whenBookingStateFUTURE() {
+    void getAllByOwner_whenBookingStateIsFUTURE() {
         Long userId = userDto.getId();
         List<BookingOutDto> expectedBookingsDtoOut = List.of(toBookingDtoOut(booking));
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
@@ -398,8 +390,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Тестирование получения всех бронирований владельцем со статусом WAITING")
-    void getAllByOwner_whenBookingStateWAITING() {
+    void getAllByOwner_whenBookingStateIsWAITING() {
         Long userId = userDto.getId();
         List<BookingOutDto> expectedBookingsDtoOut = List.of(toBookingDtoOut(booking));
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
@@ -412,8 +403,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Тестирование получения всех бронирований владельцем со статусом REJECTED")
-    void getAllByOwner_whenBookingStateREJECTED() {
+    void getAllByOwner_whenBookingStateIsREJECTED() {
         Long userId = userDto.getId();
         List<BookingOutDto> expectedBookingsDtoOut = List.of(toBookingDtoOut(booking));
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
@@ -426,7 +416,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void getAllByOwner_whenBookingStateIsNotValid_thenThrowIllegalArgumentException() {
+    void getAllByOwner_whenBookingStateIsNotValid_ThrowsIllegalArgumentException() {
         Long userId = userDto.getId();
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 

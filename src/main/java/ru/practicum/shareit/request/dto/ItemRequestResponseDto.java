@@ -2,6 +2,7 @@ package ru.practicum.shareit.request.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.dto.ItemDtoForRequests;
 import ru.practicum.shareit.util.Create;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class ItemRequestResponseDto {
     private Long id;
     @NotBlank(groups = {Create.class}, message = "Description cannot be empty")

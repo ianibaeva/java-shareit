@@ -1,13 +1,11 @@
 package ru.practicum.shareit.booking.service;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.practicum.shareit.booking.dto.BookItemRequestDto;
-import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingOutDto;
 import ru.practicum.shareit.enums.State;
 import ru.practicum.shareit.enums.Status;
@@ -87,7 +85,7 @@ public class BookingServiceIntegrationTest {
 
 
     @Test
-    void update_whenBookingIdAndUserIdAreNotValid_thenThrowObjectNotFoundException() {
+    void update_whenBookingIdAndUserIdAreNotValid_ThrowsObjectNotFoundException() {
         Long userId = 3L;
         Long bookingId = 3L;
 

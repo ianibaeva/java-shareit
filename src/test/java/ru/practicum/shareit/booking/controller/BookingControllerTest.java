@@ -24,9 +24,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = BookingController.class)
@@ -62,7 +60,7 @@ public class BookingControllerTest {
     }
 
     @Test
-    void createBooking_whenValidDates_thenReturnStatusOk() throws Exception {
+    void createBooking_whenValidDates_ReturnsStatusOk() throws Exception {
         when(bookingService.create(anyLong(), any(BookItemRequestDto.class)))
                 .thenReturn(bookingOutDto);
 
@@ -77,7 +75,7 @@ public class BookingControllerTest {
     }
 
     @Test
-    void createBooking_whenInvalidDates_thenReturnBadRequest() throws Exception {
+    void createBooking_whenInvalidDates_ReturnsBadRequest() throws Exception {
         bookItemRequestDto.setStart(LocalDateTime.now().plusDays(5));
         bookItemRequestDto.setEnd(LocalDateTime.now().plusDays(2));
 
@@ -91,7 +89,7 @@ public class BookingControllerTest {
     }
 
     @Test
-    void updateBooking_whenValidData_thenReturnStatusOk() throws Exception {
+    void updateBooking_whenValidData_ReturnsStatusOk() throws Exception {
         when(bookingService.update(anyLong(), anyLong(), anyBoolean()))
                 .thenReturn(bookingOutDto);
 
@@ -106,25 +104,25 @@ public class BookingControllerTest {
     }
 
     @Test
-    void updateBooking_whenInvalidData_thenReturnInternalServerError() throws Exception {
+    void updateBooking_whenInvalidData_ReturnsInternalServerError() throws Exception {
         when(bookingService.update(anyLong(), anyLong(), anyBoolean()))
                 .thenReturn(bookingOutDto);
 
-        mockMvc.perform(patch("/bookings/1")  // Replace 1 with the actual booking ID
-                        .param("approved", "invalid") // Invalid value for "approved"
+        mockMvc.perform(patch("/bookings/1")
+                        .param("approved", "invalid")
                         .characterEncoding(StandardCharsets.UTF_8.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(Constant.REQUEST_HEADER_USER_ID, 1L)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError()); // Change to isInternalServerError()
+                .andExpect(status().isInternalServerError());
     }
 
     @Test
-    void getByIdWith_whenValidBookingId_thenReturnStatusOk() throws Exception {
+    void getByIdWith_whenValidBookingId_ReturnsStatusOk() throws Exception {
         when(bookingService.getById(anyLong(), anyLong()))
                 .thenReturn(bookingOutDto);
 
-        mockMvc.perform(get("/bookings/1")  // Replace 1 with the actual booking ID
+        mockMvc.perform(get("/bookings/1")
                         .characterEncoding(StandardCharsets.UTF_8.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(Constant.REQUEST_HEADER_USER_ID, 1L)
@@ -134,7 +132,7 @@ public class BookingControllerTest {
     }
 
     @Test
-    void getAllBookings_thenReturnStatusOk() throws Exception {
+    void getAllBookings_ReturnsStatusOk() throws Exception {
         List<BookingOutDto> bookingList = new ArrayList<>();
         bookingList.add(bookingOutDto);
 
@@ -159,7 +157,7 @@ public class BookingControllerTest {
                 .when(bookingService).getAllByBooker(anyLong(), eq("INVALID_STATUS"), anyInt(), anyInt());
 
         mockMvc.perform(get("/bookings")
-                        .param("state", "INVALID_STATUS")  // Invalid status
+                        .param("state", "INVALID_STATUS")
                         .param("from", "0")
                         .param("size", "10")
                         .characterEncoding(StandardCharsets.UTF_8.toString())
@@ -171,7 +169,7 @@ public class BookingControllerTest {
     }
 
     @Test
-    void getAllBookingsByOwner_thenReturnStatusOk() throws Exception {
+    void getAllBookingsByOwner_ReturnsStatusOk() throws Exception {
         List<BookingOutDto> bookingList = new ArrayList<>();
         bookingList.add(bookingOutDto);
 

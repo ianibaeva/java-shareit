@@ -90,7 +90,7 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void findAllByBookerId() {
+    void findAllByBookerIdTest() {
         List<Booking> bookings = bookingRepository.findAllByBookerId(1L, PageRequest.of(0, 10));
 
         assertEquals(bookings.size(), 3);
