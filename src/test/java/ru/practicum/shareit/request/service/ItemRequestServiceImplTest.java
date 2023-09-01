@@ -90,7 +90,7 @@ class ItemRequestServiceImplTest {
     @Test
     public void createRequestTest() {
         Long userId = user.getId();
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(userRepository.countById(userId)).thenReturn(1L);
         when(itemRequestRepository.save(any())).thenReturn(itemRequest);
         ItemRequestDto actualNewRequest = itemRequestService.addNewRequest(itemRequestDto, userId);
 
