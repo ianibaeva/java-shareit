@@ -49,7 +49,7 @@ class ItemRepositoryTest {
         item.setDescription("TestItemDescription");
         item.setAvailable(true);
         item.setOwner(user);
-        item.setRequestId(itemRequest.getId());
+        item.setRequest(itemRequest);
         testEntityManager.persist(item);
 
         testEntityManager.flush();
@@ -80,7 +80,7 @@ class ItemRepositoryTest {
 
     @Test
     void testFindAllByRequestId() {
-        List<Item> items = itemRepository.findAllByRequestId(itemRequest.getId());
+        List<Item> items = itemRepository.findAllByRequest_Id(itemRequest.getId());
 
         assertEquals(1, items.size());
         assertEquals("TestItem", items.get(0).getName());

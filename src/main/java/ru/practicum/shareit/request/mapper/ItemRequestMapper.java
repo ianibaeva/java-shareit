@@ -13,10 +13,10 @@ import java.util.List;
 public class ItemRequestMapper {
 
     public static ItemRequest toItemRequest(ItemRequestDto dto) {
-        return new ItemRequest(null,
-                dto.getDescription(),
-                null,
-                LocalDateTime.now());
+        return ItemRequest.builder()
+                .description(dto.getDescription())
+                .created(LocalDateTime.now())
+                .build();
     }
 
     public static ItemRequestDto toItemRequestDto(ItemRequest request) {

@@ -22,6 +22,7 @@ import ru.practicum.shareit.item.dto.ItemDtoOut;
 import ru.practicum.shareit.item.dto.ItemResponseDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
@@ -177,7 +178,7 @@ class ItemServiceImplTest {
         updatedItem.setDescription("updated description");
         updatedItem.setAvailable(false);
         updatedItem.setOwner(user);
-        updatedItem.setRequestId(1L);
+        updatedItem.setRequest(new ItemRequest());
 
         when(itemRepository.findById(anyLong())).thenReturn(Optional.of(updatedItem));
         when(itemRepository.save(updatedItem)).thenReturn(updatedItem);

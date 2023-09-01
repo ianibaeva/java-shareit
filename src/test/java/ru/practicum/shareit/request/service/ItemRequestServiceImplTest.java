@@ -115,7 +115,7 @@ class ItemRequestServiceImplTest {
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(itemRequestRepository.findById(requestId)).thenReturn(Optional.of(itemRequest));
-        when(itemRepository.findAllByRequestId(anyLong())).thenReturn(List.of());
+        when(itemRepository.findAllByRequest_Id(anyLong())).thenReturn(List.of());
 
         ItemRequestResponseDto actual = itemRequestService.getRequestById(userId, requestId);
 

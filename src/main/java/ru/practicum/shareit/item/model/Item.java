@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.model;
 
 import lombok.*;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "items")
 public class Item {
     @Id
@@ -25,11 +27,12 @@ public class Item {
     @Column(name = "available")
     private Boolean available;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
     @ToString.Exclude
     private User owner;
 
-    @Column(name = "request_id")
-    private Long requestId;
+    @ManyToOne
+    @JoinColumn(name = "request_id")
+    private ItemRequest request;
 }

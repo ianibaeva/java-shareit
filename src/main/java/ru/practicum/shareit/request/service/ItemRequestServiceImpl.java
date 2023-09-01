@@ -31,8 +31,11 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Override
     @Transactional
     public ItemRequestDto addNewRequest(ItemRequestDto dto, Long userId) {
-        userRepository.findById(userId)
-                .orElseThrow(() -> new ObjectNotFoundException("User not found"));
+        Long userExists = userRepository.countById(userId);
+
+        if (userExists == 0) {
+            throw new ObjectNotFoundException("User not found");
+        }
 
         ItemRequest request = toItemRequest(dto);
         request.setRequestorId(userId);
@@ -78,7 +81,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     public ItemRequestResponseDto getRequestDto(ItemRequest request) {
-        List<ItemDtoForRequests> items = itemRepository.findAllByRequestId(request.getRequestorId()).stream()
+        List<ItemDtoForRequests> items = itemRepository.findAllByRequest_Id(request.getRequestorId()).stream()
                 .map(ItemMapper::toItemDtoShort)
                 .collect(Collectors.toList());
 
