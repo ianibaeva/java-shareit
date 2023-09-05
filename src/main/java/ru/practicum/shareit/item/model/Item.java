@@ -11,6 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "items")
 public class Item {
     @Id
@@ -33,6 +34,5 @@ public class Item {
 
     @ManyToOne
     @JoinColumn(name = "request_id")
-    @ToString.Exclude
     private ItemRequest request;
 }
