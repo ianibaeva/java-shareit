@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.practicum.shareit.booking.dto.BookItemRequestDto;
 import ru.practicum.shareit.booking.dto.BookingOutDto;
-import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.enums.State;
 import ru.practicum.shareit.enums.Status;
 import ru.practicum.shareit.exception.ObjectNotFoundException;

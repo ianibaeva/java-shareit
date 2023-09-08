@@ -8,7 +8,6 @@ import ru.practicum.shareit.booking.dto.BookingOutDto;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.enums.State;
 import ru.practicum.shareit.util.Constant;
-import ru.practicum.shareit.validator.PageValidator;
 
 import java.util.List;
 import java.util.Objects;
