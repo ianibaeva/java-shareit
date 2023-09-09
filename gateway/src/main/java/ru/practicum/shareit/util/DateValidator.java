@@ -12,7 +12,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(ElementType.TYPE_USE)
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = DateValidation.class)
+@Constraint(validatedBy = CheckDateValidation.class)
 public @interface DateValidator {
     String message() default "Start must be after now. Start must be before end and not null";
 

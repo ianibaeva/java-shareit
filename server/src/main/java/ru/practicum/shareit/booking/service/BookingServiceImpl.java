@@ -19,6 +19,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
+import ru.practicum.shareit.util.Constant;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -109,7 +110,7 @@ public class BookingServiceImpl implements BookingService {
         userRepository.findById(userId)
                 .orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
-        Pageable pageable = PageRequest.of(from / size, size, Sort.by(Sort.Direction.DESC, "start"));
+        Pageable pageable = PageRequest.of(from / size, size, Constant.SORT_BY_DESC_START);
 
         List<Booking> bookings;
         LocalDateTime now = LocalDateTime.now();
@@ -149,7 +150,7 @@ public class BookingServiceImpl implements BookingService {
         userRepository.findById(userId)
                 .orElseThrow(() -> new ObjectNotFoundException("User not found"));
 
-        Pageable pageable = PageRequest.of(from / size, size, Sort.by(Sort.Direction.DESC, "start"));
+        Pageable pageable = PageRequest.of(from / size, size, Constant.SORT_BY_DESC_START);
 
         List<Booking> bookings;
         LocalDateTime now = LocalDateTime.now();

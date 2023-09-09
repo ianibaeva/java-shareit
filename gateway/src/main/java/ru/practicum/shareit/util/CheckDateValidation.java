@@ -6,7 +6,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.time.LocalDateTime;
 
-public class DateValidation implements ConstraintValidator<DateValidator, BookItemRequestDto> {
+public class CheckDateValidation implements ConstraintValidator<DateValidator, BookItemRequestDto> {
     @Override
     public void initialize(DateValidator constraintAnnotation) {
     }

@@ -74,20 +74,6 @@ public class BookingControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(bookingOutDto.getId()));
     }
 
-//    @Test
-//    void createBooking_whenInvalidDates_ReturnsBadRequest() throws Exception {
-//        bookItemRequestDto.setStart(LocalDateTime.now().plusDays(5));
-//        bookItemRequestDto.setEnd(LocalDateTime.now().plusDays(2));
-//
-//        mockMvc.perform(post("/bookings")
-//                        .content(mapper.writeValueAsString(bookItemRequestDto))
-//                        .characterEncoding(StandardCharsets.UTF_8)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .header(Constant.REQUEST_HEADER_USER_ID, 1L)
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isBadRequest());
-//    }
-
     @Test
     void updateBooking_whenValidData_ReturnsStatusOk() throws Exception {
         when(bookingService.update(anyLong(), anyLong(), anyBoolean()))

@@ -55,7 +55,6 @@ public class BookingController {
             @RequestParam(value = "state", defaultValue = "ALL") String state,
             @RequestParam(defaultValue = "0") Integer from,
             @RequestParam(defaultValue = "10") Integer size) {
-        //PageValidator.validatePageParameters(from, size);
         return bookingService.getAllByOwner(userId, state, from, size);
     }
 }
