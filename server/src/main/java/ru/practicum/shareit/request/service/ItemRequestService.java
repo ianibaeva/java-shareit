@@ -7,7 +7,7 @@ import ru.practicum.shareit.request.model.ItemRequest;
 import java.util.List;
 
 public interface ItemRequestService {
-    ItemRequestDto addNewRequest(Long userId, ItemRequestDto requestDto);
+    ItemRequestDto addNewRequest(ItemRequestDto dto, Long userId);
 
     ItemRequestResponseDto getRequestById(Long userId, Long requestId);
 

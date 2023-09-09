@@ -55,6 +55,46 @@ class ItemControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(IsNull.nullValue()));
     }
 
+//    @Test
+//    void createItem_whenItemIsNotValid_ReturnsBadRequest() throws Exception {
+//        ItemResponseDto itemDtoToCreate = new ItemResponseDto();
+//        itemDtoToCreate.setDescription(" ");
+//        itemDtoToCreate.setName(" ");
+//        itemDtoToCreate.setAvailable(null);
+//
+//        when(itemService.addItem(any(ItemDtoOut.class), anyLong()))
+//                .thenReturn(itemDtoToCreate);
+//
+//        mockMvc.perform(post("/items")
+//                        .content(objectMapper.writeValueAsString(itemDtoToCreate))
+//                        .characterEncoding(StandardCharsets.UTF_8)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .header(Constant.REQUEST_HEADER_USER_ID, 1L)
+//                        .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isBadRequest());
+//    }
+
+//    @Test
+//    void update_whenItemIsNotValid_ReturnsBadRequest() throws Exception {
+//        Long itemId = 0L;
+//        ItemResponseDto itemDtoToCreate = new ItemResponseDto();
+//        itemDtoToCreate.setId(itemId);
+//        itemDtoToCreate.setDescription("");
+//        itemDtoToCreate.setName("");
+//        itemDtoToCreate.setAvailable(true);
+//
+//        when(itemService.updateItem(anyLong(), any(ItemDtoOut.class), anyLong()))
+//                .thenReturn(itemDtoToCreate);
+//
+//        mockMvc.perform(patch("/items/{itemId}", itemId)
+//                        .content(objectMapper.writeValueAsString(itemDtoToCreate))
+//                        .characterEncoding(StandardCharsets.UTF_8)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .header(Constant.REQUEST_HEADER_USER_ID, 1L)
+//                        .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+//    }
+
     @Test
     void update_whenItemIsValid_ReturnsStatusIsOk() throws Exception {
         Long itemId = 0L;

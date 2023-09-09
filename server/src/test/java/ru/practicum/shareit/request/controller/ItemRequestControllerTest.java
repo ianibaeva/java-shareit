@@ -59,7 +59,7 @@ class ItemRequestControllerTest {
     void createRequest() throws Exception {
         ItemRequestDto requestDto = new ItemRequestDto();
         requestDto.setDescription("description");
-        when(requestService.addNewRequest(anyLong(), eq(requestDto))).thenReturn(requestDto);
+        when(requestService.addNewRequest(eq(requestDto), anyLong())).thenReturn(requestDto);
 
         mockMvc.perform(post("/requests")
                         .content(objectMapper.writeValueAsString(requestDto))

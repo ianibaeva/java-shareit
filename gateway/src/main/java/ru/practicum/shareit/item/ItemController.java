@@ -26,7 +26,7 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     public ResponseEntity<Object> get(
-            @RequestHeader(Constant.REQUEST_HEADER_USER_ID) Long userId,
+            @RequestHeader("X-Sharer-User-Id") Long userId,
             @PathVariable Long itemId) {
         return itemClient.getItemById(itemId, userId);
     }
@@ -40,28 +40,28 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<Object> addItem(
-            @RequestHeader(Constant.REQUEST_HEADER_USER_ID) Long userId,
+            @RequestHeader("X-Sharer-User-Id") Long userId,
             @Validated({Create.class})
-            @RequestBody ItemDto itemDtoOut) {
-        return itemClient.addItem(itemDtoOut, userId);
+            @RequestBody ItemDto itemDto) {
+        return itemClient.addItem(itemDto, userId);
     }
 
     @PatchMapping("/{itemId}")
-    public ResponseEntity<Object> updateItem(
-            @RequestHeader((Constant.REQUEST_HEADER_USER_ID)) Long userId,
+    public ResponseEntity<Object> update(
+            @RequestHeader("X-Sharer-User-Id") Long userId,
             @Validated({Update.class})
-            @RequestBody ItemDto itemDtoOut,
+            @RequestBody ItemDto itemDto,
             @PathVariable("itemId") Long itemId) {
-        return itemClient.updateItem(itemId, userId, itemDtoOut);
+        return itemClient.updateItem(userId, itemId, itemDto);
     }
 
     @PostMapping("/{itemId}/comment")
     public ResponseEntity<Object> createComment(
-            @RequestHeader((Constant.REQUEST_HEADER_USER_ID)) Long userId,
+            @RequestHeader("X-Sharer-User-Id") Long userId,
             @Validated({Create.class})
-            @RequestBody CommentDto commentRequestDto,
+            @RequestBody CommentDto commentDto,
             @PathVariable Long itemId) {
-        return itemClient.createComment(userId, commentRequestDto, itemId);
+        return itemClient.createComment(commentDto, userId, itemId);
     }
 
     @DeleteMapping("/{id}")

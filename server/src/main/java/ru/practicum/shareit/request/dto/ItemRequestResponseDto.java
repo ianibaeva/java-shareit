@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.dto.ItemDtoForRequests;
-import ru.practicum.shareit.util.Create;
 
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,7 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 public class ItemRequestResponseDto {
     private Long id;
-    @NotBlank(groups = {Create.class}, message = "Description cannot be empty")
     private String description;
     private LocalDateTime created;
     private List<ItemDtoForRequests> items;

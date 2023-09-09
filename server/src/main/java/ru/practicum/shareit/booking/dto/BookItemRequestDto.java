@@ -11,10 +11,8 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-//@StartBeforeEndDateValid(groups = {Create.class})
 public class BookItemRequestDto {
     private Long itemId;
-    //@FutureOrPresent(groups = {Create.class})
     private LocalDateTime start;
     private LocalDateTime end;
 }

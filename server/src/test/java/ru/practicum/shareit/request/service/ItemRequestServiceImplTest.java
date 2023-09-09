@@ -92,7 +92,7 @@ class ItemRequestServiceImplTest {
         Long userId = user.getId();
         when(userRepository.countById(userId)).thenReturn(1L);
         when(itemRequestRepository.save(any())).thenReturn(itemRequest);
-        ItemRequestDto actualNewRequest = itemRequestService.addNewRequest(userId, itemRequestDto);
+        ItemRequestDto actualNewRequest = itemRequestService.addNewRequest(itemRequestDto, userId);
 
         assertNotNull(actualNewRequest);
         assertEquals(addItemRequestDto.getId(), actualNewRequest.getId());

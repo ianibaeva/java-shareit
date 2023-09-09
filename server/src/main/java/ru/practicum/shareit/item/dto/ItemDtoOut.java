@@ -4,22 +4,25 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.booking.dto.BookingItemDto;
-import ru.practicum.shareit.item.comment.dto.CommentResponseDto;
 
-import java.util.List;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class ItemDtoOut {
+
     private Long id;
+
+    @NotBlank(message = "Name can't be blank")
     private String name;
+
+    @NotBlank(message = "Description can't be blank")
     private String description;
+
+    @NotNull
     private Boolean available;
-    private BookingItemDto lastBooking;
-    private BookingItemDto nextBooking;
-    private List<CommentResponseDto> comments;
     private Long requestId;
 }

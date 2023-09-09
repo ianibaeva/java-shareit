@@ -1,6 +1,8 @@
 package ru.practicum.shareit.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -48,6 +50,40 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.name").value(userDtoToCreate.getName()));
     }
 
+//    @Test
+//    void createUser_whenUserEmailIsNotValid_ReturnsBadRequest() throws Exception {
+//        UserDto userDtoToCreate = new UserDto();
+//        userDtoToCreate.setEmail("email.com");
+//        userDtoToCreate.setName("name");
+//
+//        when(userService.addUser(userDtoToCreate)).thenReturn(userDtoToCreate);
+//
+//        mockMvc.perform(post("/users")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(userDtoToCreate)))
+//                .andExpect(status().isBadRequest());
+//
+//        verify(userService, never()).addUser(userDtoToCreate);
+//    }
+
+//    @Test
+//    @SneakyThrows
+//    @DisplayName("Testing user creation with an invalid name")
+//    void createUser_whenNameIsNotValid_ReturnsBadRequest() {
+//        UserDto userDtoToCreate = new UserDto();
+//        userDtoToCreate.setEmail("email@email.com");
+//        userDtoToCreate.setName("     ");
+//
+//        when(userService.addUser(userDtoToCreate)).thenReturn(userDtoToCreate);
+//
+//        mockMvc.perform(post("/users")
+//                        .contentType("application/json")
+//                        .content(objectMapper.writeValueAsString(userDtoToCreate)))
+//                .andExpect(status().isBadRequest());
+//
+//        verify(userService, never()).addUser(userDtoToCreate);
+//    }
+
     @Test
     void updateUser_whenUserIsValid() throws Exception {
         Long userId = 0L;
@@ -65,6 +101,23 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.email").value(userDtoToUpdate.getEmail()))
                 .andExpect(jsonPath("$.name").value(userDtoToUpdate.getName()));
     }
+
+//    @Test
+//    void updateUser_whenUserIsNotValid_ReturnsBadRequest() throws Exception {
+//        Long userId = 0L;
+//        UserDto userDtoToUpdate = new UserDto();
+//        userDtoToUpdate.setEmail("update.com");
+//        userDtoToUpdate.setName("    ");
+//
+//        when(userService.updateUser(userDtoToUpdate, userId)).thenReturn(userDtoToUpdate);
+//
+//        mockMvc.perform(patch("/users/{userId}", userId)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(userDtoToUpdate)))
+//                .andExpect(status().isBadRequest());
+//
+//        verify(userService, never()).updateUser(userDtoToUpdate, userId);
+//    }
 
     @Test
     void getTest() throws Exception {

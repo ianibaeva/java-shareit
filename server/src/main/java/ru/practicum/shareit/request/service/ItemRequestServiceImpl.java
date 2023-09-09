@@ -30,14 +30,14 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     @Override
     @Transactional
-    public ItemRequestDto addNewRequest(Long userId, ItemRequestDto requestDto) {
+    public ItemRequestDto addNewRequest(ItemRequestDto dto, Long userId) {
         Long userExists = userRepository.countById(userId);
 
         if (userExists == 0) {
             throw new ObjectNotFoundException("User not found");
         }
 
-        ItemRequest request = toItemRequest(requestDto);
+        ItemRequest request = toItemRequest(dto);
         request.setRequestorId(userId);
 
         return toItemRequestDto(requestRepository.save(request));

@@ -1,15 +1,18 @@
 package ru.practicum.shareit.item.comment.dto;
 
 import lombok.Data;
-import ru.practicum.shareit.util.Create;
-import ru.practicum.shareit.util.Update;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 
 @Data
 public class CommentRequestDto {
-    @NotBlank(groups = {Create.class})
-    @Size(max = 255, groups = {Create.class, Update.class})
+    private Long id;
+
     private String text;
+
+    private String authorName;
+
+    @DateTimeFormat(pattern = "yyyy-MM-ddTHH:mm:ss")
+    private LocalDateTime created;
 }

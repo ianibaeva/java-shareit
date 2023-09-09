@@ -328,14 +328,14 @@ class BookingServiceImplTest {
         assertEquals(expectedBookingsDtoOut, actualBookingsDtoOut);
     }
 
-//    @Test
-//    void getAllByBooker_whenBookingStateIsNotValid_ThrowsIllegalArgumentException() {
-//        Long userId = userDto.getId();
-//        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-//
-//        assertThrows(IllegalArgumentException.class,
-//                () -> bookingService.getAllByBooker(user.getId(), "INVALID_STATE", 0, 10));
-//    }
+    @Test
+    void getAllByBooker_whenBookingStateIsNotValid_ThrowsIllegalArgumentException() {
+        Long userId = userDto.getId();
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> bookingService.getAllByBooker(user.getId(), "INVALID_STATE", 0, 10));
+    }
 
     @Test
     void getAllByOwner_whenBookingStateIsAll() {
@@ -414,12 +414,12 @@ class BookingServiceImplTest {
         assertEquals(expectedBookingsDtoOut, actualBookingsDtoOut);
     }
 
-//    @Test
-//    void getAllByOwner_whenBookingStateIsNotValid_ThrowsIllegalArgumentException() {
-//        Long userId = userDto.getId();
-//        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-//
-//        assertThrows(IllegalArgumentException.class,
-//                () -> bookingService.getAllByOwner(user.getId(), "INVALID_STATE", 0, 10));
-//    }
+    @Test
+    void getAllByOwner_whenBookingStateIsNotValid_ThrowsIllegalArgumentException() {
+        Long userId = userDto.getId();
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> bookingService.getAllByOwner(user.getId(), "INVALID_STATE", 0, 10));
+    }
 }

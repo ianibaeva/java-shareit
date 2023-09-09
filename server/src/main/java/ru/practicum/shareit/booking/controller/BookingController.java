@@ -1,21 +1,17 @@
 package ru.practicum.shareit.booking.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookItemRequestDto;
 import ru.practicum.shareit.booking.dto.BookingOutDto;
 import ru.practicum.shareit.booking.service.BookingService;
-import ru.practicum.shareit.enums.State;
 import ru.practicum.shareit.util.Constant;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor
-@Validated
 public class BookingController {
 
     private final BookingService bookingService;
@@ -50,11 +46,6 @@ public class BookingController {
             @RequestParam(value = "state", defaultValue = "ALL") String state,
             @RequestParam(defaultValue = "0") Integer from,
             @RequestParam(defaultValue = "10") Integer size) {
-
-        State bookingState = State.from(state);
-        if (Objects.isNull(bookingState)) {
-            throw new IllegalArgumentException(String.format("Unknown state: %s", state));
-        }
         return bookingService.getAllByBooker(userId, state, from, size);
     }
 
@@ -64,11 +55,7 @@ public class BookingController {
             @RequestParam(value = "state", defaultValue = "ALL") String state,
             @RequestParam(defaultValue = "0") Integer from,
             @RequestParam(defaultValue = "10") Integer size) {
-
-        State bookingState = State.from(state);
-        if (Objects.isNull(bookingState)) {
-            throw new IllegalArgumentException(String.format("Unknown state: %s", state));
-        }
+        //PageValidator.validatePageParameters(from, size);
         return bookingService.getAllByOwner(userId, state, from, size);
     }
 }

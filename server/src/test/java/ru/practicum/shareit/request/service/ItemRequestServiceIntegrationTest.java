@@ -43,7 +43,7 @@ public class ItemRequestServiceIntegrationTest {
         UserDto addedUser = userService.addUser(createUserDto("user1", "user1@example.com"));
         ItemRequestDto itemRequestDto = createItemRequestDto("Test description");
 
-        ItemRequestDto addedRequest = itemRequestService.addNewRequest(addedUser.getId(), itemRequestDto);
+        ItemRequestDto addedRequest = itemRequestService.addNewRequest(itemRequestDto, addedUser.getId());
 
         assertNotNull(addedRequest.getId());
         assertEquals("Test description", addedRequest.getDescription());
