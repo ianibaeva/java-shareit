@@ -14,8 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ItemRequestDto {
     private Long id;
-    @NotBlank//(groups = {Create.class})
-    //@Size(groups = {Create.class}, max = 512)
+    @NotBlank
     private String description;
     private LocalDateTime created;
 }
